@@ -31,4 +31,4 @@ const admin = (req, res, next) => {
   }
 };
 
-module.exports = { protect };
+module.exports = { protect, admin }; // Export both protect and admin

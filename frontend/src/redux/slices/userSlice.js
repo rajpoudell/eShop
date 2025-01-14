@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { registerUser, loginUser } from "../../services/api"; // Make sure this is defined correctly
-
+import {toast} from "react-hot-toast"
 // Register user
 export const registerUsers = createAsyncThunk(
   "user/register",
@@ -49,6 +49,8 @@ const userSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.userInfo = null;
+      toast.error("logging out...")
+      localStorage.removeItem("cart"); // Clear user data from storage
       localStorage.removeItem("userInfo"); // Clear user data from storage
       localStorage.removeItem("token"); // Clear user data from storage
     },

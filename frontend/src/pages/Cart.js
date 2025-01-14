@@ -10,6 +10,8 @@ import CheckOutForm from "../components/CheckOutForm";
 import axios from "axios";
 import { useEffect } from "react";
 
+const API_URL = process.env.REACT_APP_URL;
+
 const Cart = () => {
   const dispatch = useDispatch();
   const { cartItem, cartLength, totalAmount } = useSelector(
@@ -37,7 +39,7 @@ const Cart = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/checkout",
+        `${API_URL}/api/checkout`,
         orderDetails
       );
 
@@ -67,7 +69,7 @@ const Cart = () => {
   }, [dispatch]);
 
   return (
-    <div className="container mx-auto p-6 w-[90%]">
+    <div className="container mx-auto p-6 w-[90%]  ">
 
       {cartLength === 0 ? (
         <>
@@ -82,7 +84,7 @@ const Cart = () => {
           {cartItem.map((item) => (
             <div
               key={item._id}
-              className="flex justify-between items-center border-b py-4"
+              className="flex justify-between items-center border-b-2 border-slate-300 py-4"
             >
               <img
                 src={`http://localhost:5000/uploads/${item.image}`}

@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { fetchCategory } from "../services/api";
+import { addProduct, fetchCategory } from "../services/api";
 
 // Fetch categories from the backend
 
 const ProductForm = () => {
   const [categories, setCategories] = useState([]);
+  const [image, setImage] = useState(null);
+
   const [formData, setFormData] = useState({
     name: "",
     price: "",
     description: "",
-    image: "",
     category: "",
     stock: "",
+    image: "",
   });
 
   // Fetch categories when the component mounts
@@ -24,21 +26,60 @@ const ProductForm = () => {
         console.error("Error fetching categories:", error);
       }
     };
-
     getCategories();
   }, []);
 
   // Handle input change
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value, type, files } = e.target;
+
+    if (type === "file") {
+      const file = files[0];
+      setImage(file); // Store file in state
+      setFormData((prevData) => ({
+        ...prevData,
+        image: file, // Store file in formData
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Product Data:", formData);
-    // Add API request logic here
+
+    const formDataToSend = new FormData();
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("price", formData.price);
+    formDataToSend.append("description", formData.description);
+    formDataToSend.append("category", formData.category);
+    formDataToSend.append("stock", formData.stock);
+
+    if (image) {
+      formDataToSend.append("image", image); // Append file
+    }
+
+    try {
+      const response = await addProduct(formDataToSend);
+      console.log("Product added successfully:", response);
+
+      // Reset form after successful submission
+      setFormData({
+        name: "",
+        price: "",
+        description: "",
+        category: "",
+        stock: "",
+      });
+
+      setImage(null);
+    } catch (error) {
+      console.error("Failed to add product:", error);
+    }
   };
 
   return (
@@ -46,7 +87,7 @@ const ProductForm = () => {
       <h2 className="text-2xl font-semibold text-gray-700 mb-4">Add Product</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Product Name */}
-        <div >
+        <div>
           <label className="block text-gray-600">Product Name</label>
           <input
             type="text"
@@ -91,12 +132,11 @@ const ProductForm = () => {
         <div>
           <label className="block text-gray-600">Image URL</label>
           <input
-            type="text"
+            type="file"
             name="image"
-            value={formData.image}
-            onChange={handleChange}
+            onChange={handleChange} // Keep this
             className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter image URL"
+            placeholder="Upload a Image"
           />
         </div>
 
@@ -116,8 +156,8 @@ const ProductForm = () => {
             {categories.length === 0 ? (
               <option disabled>Loading categories...</option>
             ) : (
-              categories.map((cat) => (
-                <option key={cat} value={cat}>
+              categories.map((cat, i) => (
+                <option key={i} value={cat}>
                   {cat}
                 </option>
               ))

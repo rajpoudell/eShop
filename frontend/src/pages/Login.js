@@ -43,8 +43,8 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 ">
-      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg ">
+    <div className="flex justify-center items-center min-h-screen bg-slate-200 ">
+      <div className="w-full max-w-md bg-slate-100 p-8 rounded-lg shadow-lg ">
         <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">Login</h2>
 
         {/* Display error if login fails */}

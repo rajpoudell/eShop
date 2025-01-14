@@ -14,7 +14,7 @@ import AddProduct from "./Pages For Admin/AddProduct";
 
 function App() {
   return (
-    <>
+    <div  className="bg-slate-200">
       <Router>
         {" "}
         {/* Use BrowserRouter here, no need for another Router inside */}
@@ -34,7 +34,7 @@ function App() {
       </Router>
       <Toaster />
 
-    </>
+    </div>
   );
 }
 

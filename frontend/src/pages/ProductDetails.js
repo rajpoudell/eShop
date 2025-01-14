@@ -6,6 +6,8 @@ import { addToCart } from "../redux/slices/cartSlice";
 import { getProducts } from "../redux/slices/productSlice";
 import toast from "react-hot-toast";
 
+const API_URL = process.env.REACT_APP_URL;
+
 const ProductDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -26,13 +28,13 @@ const ProductDetails = () => {
     return <div>Loading...</div>;
   }
   return (
-    <section className="text-gray-600 overflow-hidden">
+    <section className="text-gray-600 overflow-hidden bg-slate-200">
       <div className="container px-5 py-24 mx-auto">
         <div className="lg:w-4/5 mx-auto flex flex-wrap">
           <img
             alt="ecommerce"
-            className="lg:w-1/2 w-full lg:h-auto h-50 aspect-square object-cover object-center rounded"
-            src={`${"http://localhost:5000"}/uploads/${product.image}`} // Concatenate the base URL with image filename
+            className="lg:w-1/2 w-full lg:h-auto h-50 aspect-square object-cover object-center rounded bg-slate-100"
+            src={`${API_URL}/uploads/${product.image}`} // Concatenate the base URL with image filename
           />
           <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
             <h2 className="text-sm title-font text-gray-500 tracking-widest">

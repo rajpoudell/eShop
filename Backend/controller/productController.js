@@ -33,6 +33,7 @@ const addProduct = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 const getCategories = async (req, res) => {
   const categories = ['Electronics', 'Clothing', 'Books', 'Home & Kitchen', 'Beauty', 'Sports', 'Toys'];
   // console.log(categories)
