@@ -24,6 +24,7 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset, 
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -36,10 +37,10 @@ const Login = () => {
   }, [userInfo, navigate]);
 
   // Handle login form submission
-  const onSubmit = (data) => {
+  const onSubmit =  (data) => {
+     dispatch(loginUsers(data));
     toast.success("Logging...")
-    dispatch(loginUsers(data));
-    
+    reset(); 
   };
 
   return (
@@ -58,6 +59,7 @@ const Login = () => {
               type="email"
               placeholder="Enter your email"
               className="mt-1 p-3 w-full border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              autoComplete="current-email"
             />
             <p className="text-red-500 text-xs mt-1">{errors.email?.message}</p>
           </div>
@@ -67,6 +69,7 @@ const Login = () => {
             <input
               {...register("password")}
               type="password"
+              autoComplete="current-password"
               placeholder="Enter your password"
               className="mt-1 p-3 w-full border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />

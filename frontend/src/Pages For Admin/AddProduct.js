@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { addProduct, fetchCategory } from "../services/api";
+import {  fetchCategory } from "../services/api";
+import { useSelector } from "react-redux";
+import axios from "axios";
+const API_URL = process.env.REACT_APP_API_URL;
 
 // Fetch categories from the backend
 
 const ProductForm = () => {
   const [categories, setCategories] = useState([]);
   const [image, setImage] = useState(null);
+  const user = useSelector((state) => state.user.userInfo);
 
   const [formData, setFormData] = useState({
+    UserId:"",
     name: "",
     price: "",
     description: "",
@@ -51,22 +56,33 @@ const ProductForm = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     const formDataToSend = new FormData();
     formDataToSend.append("name", formData.name);
     formDataToSend.append("price", formData.price);
     formDataToSend.append("description", formData.description);
     formDataToSend.append("category", formData.category);
     formDataToSend.append("stock", formData.stock);
-
+    formDataToSend.append("UserId", user.id);
+  
     if (image) {
       formDataToSend.append("image", image); // Append file
     }
-
+  
     try {
-      const response = await addProduct(formDataToSend);
+      console.log(user.token); // Check token value
+      const response = await axios.post(
+        `${API_URL}/addproduct`, 
+        formDataToSend,  // Pass the FormData as the second argument
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`, // Add token to the request header
+            "Content-Type": "multipart/form-data", // Ensure the server expects multipart data
+          },
+        }
+      );
       console.log("Product added successfully:", response);
-
+  
       // Reset form after successful submission
       setFormData({
         name: "",
@@ -75,12 +91,13 @@ const ProductForm = () => {
         category: "",
         stock: "",
       });
-
+  
       setImage(null);
     } catch (error) {
       console.error("Failed to add product:", error);
     }
   };
+  
 
   return (
     <div className="max-w-lg mx-auto p-6 bg-gray-100 shadow-2xl rounded-lg my-4">

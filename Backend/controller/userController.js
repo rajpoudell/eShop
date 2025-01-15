@@ -56,6 +56,8 @@ const Login = async (req, res) => {
         id: user._id,
         token: user.token,
         message:"User login successfully",
+        isAdmin:user.isAdmin,
+        name:user.name,
         user:user
       });
     } else {

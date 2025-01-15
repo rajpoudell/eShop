@@ -16,9 +16,11 @@ const getProducts = async (req, res) => {
 
 const addProduct = async (req, res) => {
   try {
-    const { name, price, description, category, stock } = req.body;
+    const { name, price, description, category, stock,UserId } = req.body;
     const image = req.file ? req.file.filename : null;
+    
     const product = new Product({
+      UserId,
       name,
       price,
       description,
@@ -93,6 +95,7 @@ const orderCreated = async (req, res) => {
   try {
     const {
       buyerId,
+      buyerGuest,
       buyerName,
       buyerEmail,
       buyerPhone,

@@ -1,12 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { registerUser, loginUser } from "../../services/api"; // Make sure this is defined correctly
-import {toast} from "react-hot-toast"
+import { toast } from "react-hot-toast";
 // Register user
 export const registerUsers = createAsyncThunk(
   "user/register",
   async (userData, { rejectWithValue }) => {
     try {
-
       const response = await registerUser(userData); // Assuming registerUser returns a promise
       return response; // return the response to the fulfilled state
     } catch (error) {
@@ -20,13 +19,9 @@ export const loginUsers = createAsyncThunk(
   "user/login",
   async (credentials, { rejectWithValue }) => {
     try {
-      console.log("credentials: ", credentials);
       const data = await loginUser(credentials);
-
-      console.log("data", data);
-
-      console.log("token from slice", data.token);
       localStorage.setItem("token", data.token);
+      
       localStorage.setItem("userInfo", JSON.stringify(data.user));
       return data;
     } catch (error) {
@@ -36,9 +31,7 @@ export const loginUsers = createAsyncThunk(
 );
 
 const initialState = {
-  userInfo: localStorage.getItem("userInfo")
-    ? JSON.parse(localStorage.getItem("userInfo"))
-    : null,
+  userInfo: JSON.parse(localStorage.getItem("userInfo")) || null,
   loading: false,
   error: null,
 };
@@ -49,7 +42,7 @@ const userSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.userInfo = null;
-      toast.error("logging out...")
+      toast.error("logging out...");
       localStorage.removeItem("cart"); // Clear user data from storage
       localStorage.removeItem("userInfo"); // Clear user data from storage
       localStorage.removeItem("token"); // Clear user data from storage
@@ -77,6 +70,8 @@ const userSlice = createSlice({
       .addCase(loginUsers.fulfilled, (state, action) => {
         state.loading = false;
         state.userInfo = action.payload;
+        console.log("state.userifno",state.userInfo);
+        
       })
       .addCase(loginUsers.rejected, (state, action) => {
         state.loading = false;

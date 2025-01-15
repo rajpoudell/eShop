@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const API_URL = process.env.REACT_APP_API_URL;
+const token = localStorage.getItem("token");
 
 export const fetchProducts = async () => {
   const response = await axios.get(`${API_URL}/products`);
@@ -26,7 +27,8 @@ export const addProduct = async (productDetails) => {
   try {
     const response = await axios.post(`${API_URL}/addproduct`, productDetails, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`, // Send token in headers
+
       },
     }); 
     return response.data; 
@@ -61,10 +63,14 @@ export const createOrder = async (orderData) => {
 };
 
 
-export const orderLists = async () => {
-  const response = await axios.get(`${API_URL}/orderLists`);
-  return response.data;
-};
+// export const orderLists = async () => {
+//   const response = await axios.get(`${API_URL}/orderLists`,{
+//     headers: {
+//       Authorization: `Bearer ${token}`, // Send token in headers
+//     },
+//   });
+//   return response.data;
+// };
 
 
 export const registerUser = async (UserDetails) => {
@@ -81,10 +87,7 @@ export const registerUser = async (UserDetails) => {
 export const loginUser = async (UserDetails) => {
   try {
     const response = await axios.post(`${API_URL}/login`, UserDetails);
-    if (response.data.token) {
-      // localStorage.setItem("token", response.data.token);
-    }
-    console.log("login api react: response.data", response.data);
+
     return response.data;
   } catch (error) {
     console.error("Error", error.message);

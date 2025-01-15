@@ -26,8 +26,10 @@ const CheckOutForm = ({ onCheckOut }) => {
 
         return toast.error("Please fill in the field");
       }
+      
       onCheckOut(guestInfo);
     }else{
+      guestInfo.buyerId = "Auth";
       guestInfo.name=userInfo.name;
       guestInfo.phone =userInfo.phone;
       guestInfo.email =userInfo.email;

@@ -17,11 +17,11 @@ const Cart = () => {
   const { cartItem, cartLength, totalAmount } = useSelector(
     (state) => state.cart
   );
-
+    const user = useSelector((state) => state.user.userInfo);
   const handleCheckout = async (guestInfo) => {
     // Prepare the order details from the cart and guest info
     const orderDetails = {
-      buyerId: "guest",
+      buyerId: user ? `${user.name}` : "guest",
       buyerName: guestInfo.name,
       buyerEmail: guestInfo.email,
       buyerPhone: guestInfo.phone,
