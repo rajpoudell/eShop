@@ -3,8 +3,8 @@ import toast from "react-hot-toast";
 import {useSelector } from "react-redux";
 
 const CheckOutForm = ({ onCheckOut }) => {
-  const { userInfo } = useSelector((state) => state.user);
-
+  const userInfo  = useSelector((state) => state.user.userInfo);
+console.log(userInfo)
   const [guestInfo, setGuestInfo] = useState({
     name: "",
     phone: "",
@@ -34,7 +34,9 @@ const CheckOutForm = ({ onCheckOut }) => {
       guestInfo.phone =userInfo.phone;
       guestInfo.email =userInfo.email;
       guestInfo.address=userInfo.address;
+      console.log("checkyoutform",guestInfo);
       onCheckOut(guestInfo);
+      
     }
   };
   return (

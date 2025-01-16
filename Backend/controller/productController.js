@@ -1,9 +1,22 @@
 const OrderModel = require("../model/OrderModel");
 const Product = require("../model/ProductModel");
+const nodemailer = require("nodemailer");
+const Stripe = require("stripe");
+
 require("dotenv").config();
 
-const Stripe = require("stripe");
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+const transporter = nodemailer.createTransport({
+  service: "Gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: "kingsniper202030@gmail.com",
+    pass: process.env.PASSWORD,
+  },
+});
 
 const getProducts = async (req, res) => {
   try {
@@ -16,9 +29,9 @@ const getProducts = async (req, res) => {
 
 const addProduct = async (req, res) => {
   try {
-    const { name, price, description, category, stock,UserId } = req.body;
+    const { name, price, description, category, stock, UserId } = req.body;
     const image = req.file ? req.file.filename : null;
-    
+
     const product = new Product({
       UserId,
       name,
@@ -37,7 +50,15 @@ const addProduct = async (req, res) => {
 };
 
 const getCategories = async (req, res) => {
-  const categories = ['Electronics', 'Clothing', 'Books', 'Home & Kitchen', 'Beauty', 'Sports', 'Toys'];
+  const categories = [
+    "Electronics",
+    "Clothing",
+    "Books",
+    "Home & Kitchen",
+    "Beauty",
+    "Sports",
+    "Toys",
+  ];
   // console.log(categories)
   res.json(categories);
 };
@@ -68,7 +89,7 @@ const paymentCheckOut = async (req, res) => {
         currency: "usd", // You can change the currency if needed
         product_data: {
           name: item.name,
-          images: [`http://localhost:5000/uploads/${item.image}`], // Adjust for the product image URL if available
+          images: [`http://localhost:5000/uploads/${item.image}`],
         },
         unit_amount: item.price * 100, // Stripe accepts the price in cents
       },
@@ -130,6 +151,72 @@ const orderCreated = async (req, res) => {
 
       // Save the order
       await newOrder.save();
+
+      // Send Email
+      const mailOptions = {
+        from: "kingsniper202030@gmail.com",
+        to: buyerEmail,
+        subject: "Your Order Confirmation",
+        html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+          <h2 style="color: #333; text-align: center;">Thank You for Your Order, ${buyerName}!</h2>
+          
+          <p style="font-size: 16px; color: #555;">We appreciate your business. Below are the details of your order:</p>
+          
+          <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+            <tr>
+              <td style="padding: 8px; font-weight: bold; background-color: #f4f4f4;">Order Date:</td>
+              <td style="padding: 8px;">${new Date(
+                orderDate
+              ).toLocaleDateString()}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px; font-weight: bold; background-color: #f4f4f4;">Total Amount:</td>
+              <td style="padding: 8px; color: #E74C3C;"><strong>$${totalAmount}</strong></td>
+            </tr>
+          </table>
+    
+          <h3 style="margin-top: 20px; border-bottom: 2px solid #333; padding-bottom: 5px;">Items Ordered</h3>
+          <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+            <tr>
+              <th style="border-bottom: 2px solid #ddd; padding: 8px; text-align: left; background-color: #f8f8f8;">Product</th>
+              <th style="border-bottom: 2px solid #ddd; padding: 8px; text-align: left; background-color: #f8f8f8;">Price</th>
+              <th style="border-bottom: 2px solid #ddd; padding: 8px; text-align: left; background-color: #f8f8f8;">Quantity</th>
+            </tr>
+            ${items
+              .map(
+                (item) =>
+                  `<tr>
+                    <td style="border-bottom: 1px solid #ddd; padding: 8px;">${item.name}</td>
+                    <td style="border-bottom: 1px solid #ddd; padding: 8px;">$${item.price}</td>
+                    <td style="border-bottom: 1px solid #ddd; padding: 8px;">${item.quantity}</td>
+                  </tr>`
+              )
+              .join("")}
+          </table>
+    
+          <p style="margin-top: 20px; font-size: 14px; color: #666;">If you have any questions, feel free to <a href="mailto:support@yourstore.com" style="color: #3498db;">contact us</a>.</p>
+          
+          <p style="text-align: center; font-size: 14px; color: #777;">&copy; 2025 Your Store. All Rights Reserved.</p>
+        </div>
+      `,
+      };
+
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+          console.error("Email send error:", err);
+        } else {
+          console.log("Email sent:", info.response);
+        }
+      });
+
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+          console.error("Email send error:", err);
+        } else {
+          console.log("Email sent:", info.response);
+        }
+      });
       res
         .status(201)
         .json({ message: "Order created successfully", order: newOrder });
@@ -158,7 +245,6 @@ const OrderLists = async (req, res) => {
 
     // Respond with the list of orders
     res.status(200).json(orders);
-
   } catch (error) {
     console.error("Error fetching orders:", error);
     res.status(500).json({ message: "Server error" });
@@ -172,5 +258,5 @@ module.exports = {
   paymentCheckOut,
   orderCreated,
   OrderLists,
-  getCategories
+  getCategories,
 };

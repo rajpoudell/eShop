@@ -3,6 +3,7 @@ import "./index.css";
 import { Toaster } from "react-hot-toast";
 
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import ProductDetails from "./pages/ProductDetails";
 import Login from "./pages/Login";
@@ -14,6 +15,7 @@ import AddProduct from "./Pages For Admin/AddProduct";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AdminRoute from "./routes/AdminRoute";
 import Profile from "./pages/Profile";
+import CustomerServicePage from "./pages/public fold/CustomerServicePage";
 
 function App() {
   return (
@@ -29,6 +31,7 @@ function App() {
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/payment-success" element={<PaymentStatus />} />
           <Route path="/payment-failed" element={<PaymentStatus />} />
+          <Route path="/customer-service" element={<CustomerServicePage />} />
 
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
@@ -41,6 +44,7 @@ function App() {
             <Route path="/admin/addproduct" element={<AddProduct />} />
           </Route>
         </Routes>
+        <Footer/>
       </Router>
       <Toaster />
     </div>
