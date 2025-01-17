@@ -195,9 +195,9 @@ const orderCreated = async (req, res) => {
               .join("")}
           </table>
     
-          <p style="margin-top: 20px; font-size: 14px; color: #666;">If you have any questions, feel free to <a href="mailto:support@yourstore.com" style="color: #3498db;">contact us</a>.</p>
+          <p style="margin-top: 20px; font-size: 14px; color: #666;">If you have any questions, feel free to <a href="mailto:support@eShop.com" style="color: #3498db;">contact us</a>.</p>
           
-          <p style="text-align: center; font-size: 14px; color: #777;">&copy; 2025 Your Store. All Rights Reserved.</p>
+          <p style="text-align: center; font-size: 14px; color: #777;">&copy; 2025 eShop Store. All Rights Reserved.</p>
         </div>
       `,
       };

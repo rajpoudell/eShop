@@ -15,7 +15,9 @@ app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); 
 app.use("/api",productRoutes);
 app.use("/api",userRoute);
-
+app.get("/",(req,res) =>{
+  res.send("Server is running");
+})
 
 PORT = 5000;
 mongoose.connect(process.env.MONGO_URL)

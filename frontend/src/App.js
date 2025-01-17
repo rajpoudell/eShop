@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
 import "./index.css";
 import { Toaster } from "react-hot-toast";
 
@@ -16,12 +21,22 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import AdminRoute from "./routes/AdminRoute";
 import Profile from "./pages/Profile";
 import CustomerServicePage from "./pages/public fold/CustomerServicePage";
+import { useSelector } from "react-redux";
 
 function App() {
+  const cartLength = useSelector((state) => state.cart.cartLength || 0);
+  const userInfo = useSelector((state) => state.user.userInfo);
+ 
+
+ 
   return (
     <div className="bg-slate-200">
       <Router>
-        <Navbar />
+        <Navbar
+          userInfo={userInfo}
+          cartLength={cartLength}
+        />
+        ;{" "}
         <Routes>
           {/* Guest Routes */}
           <Route path="/" element={<Home />} />
@@ -35,16 +50,16 @@ function App() {
 
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
-            <Route path="/user/profile" element={<Profile />} /> 
+            <Route path="/user/profile" element={<Profile />} />
           </Route>
 
           {/* Admin Routes */}
-          <Route element={<AdminRoute />}>  
+          <Route element={<AdminRoute />}>
             <Route path="/admin/orderlist" element={<OrderList />} />
             <Route path="/admin/addproduct" element={<AddProduct />} />
           </Route>
         </Routes>
-        <Footer/>
+        <Footer />
       </Router>
       <Toaster />
     </div>

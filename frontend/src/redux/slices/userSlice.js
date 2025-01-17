@@ -42,7 +42,7 @@ const userSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.userInfo = null;
-      toast.error("logging out...");
+      toast.success("logging out...");
       localStorage.removeItem("cart"); // Clear user data from storage
       localStorage.removeItem("userInfo"); // Clear user data from storage
       localStorage.removeItem("token"); // Clear user data from storage
