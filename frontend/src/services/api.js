@@ -63,15 +63,6 @@ export const createOrder = async (orderData) => {
 };
 
 
-// export const orderLists = async () => {
-//   const response = await axios.get(`${API_URL}/orderLists`,{
-//     headers: {
-//       Authorization: `Bearer ${token}`, // Send token in headers
-//     },
-//   });
-//   return response.data;
-// };
-
 
 export const registerUser = async (UserDetails) => {
   try {

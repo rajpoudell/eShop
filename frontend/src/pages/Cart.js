@@ -87,7 +87,7 @@ const Cart = () => {
               className="flex justify-between items-center border-b-2 border-slate-300 py-4"
             >
               <img
-                src={`http://localhost:5000/uploads/${item.image}`}
+                src={`${process.env.REACT_APP_URL}/uploads/${item.image}`}
                 alt={item.name}
                 className="w-16 h-16 rounded"
               />

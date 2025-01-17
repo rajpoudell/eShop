@@ -4,7 +4,7 @@ const ProductCard = ({ product }) => {
   return (
     <div className=" rounded-md p-4 shadow-md bg-slate-300 hover:shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out">
       <img
-        src={`http://localhost:5000/uploads/${product.image}`} // Concatenate the base URL with image filename
+        src={`${process.env.REACT_APP_URL}/uploads/${product.image}`} // Concatenate the base URL with image filename
         alt={product.name}
         className="w-4/4 h-36 object-cover rounded-md mx-auto"
       />
