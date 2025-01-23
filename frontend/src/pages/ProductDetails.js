@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/slices/cartSlice";
@@ -70,16 +70,24 @@ const ProductDetails = () => {
             </div>
             <div className="flex gap-5 mt-8">
               <button
-                onClick={() => {dispatch(addToCart(product));
-                  toast.success('Add Product!');
+                onClick={() => {
+                  dispatch(addToCart(product));
+                  toast.success("Add Product!");
                 }}
                 className="flex  text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
               >
                 Add to Cart
               </button>
-              <button className="flex  text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
-                Buy Now !
-              </button>
+              <Link to={"/cart"}>
+                <button
+                  onClick={() => {
+                    dispatch(addToCart(product));
+                  }}
+                  className="flex  text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
+                >
+                  Buy Now !
+                </button>
+              </Link>
             </div>
           </div>
         </div>

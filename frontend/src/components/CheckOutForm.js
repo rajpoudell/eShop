@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import {useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const CheckOutForm = ({ onCheckOut }) => {
-  const userInfo  = useSelector((state) => state.user.userInfo);
-console.log(userInfo)
+  const user = useSelector((state) => state.user.userInfo);
+
+  console.log(user);
   const [guestInfo, setGuestInfo] = useState({
     name: "",
     phone: "",
@@ -15,33 +16,30 @@ console.log(userInfo)
     setGuestInfo({ ...guestInfo, [e.target.name]: e.target.value });
   };
   const handleCheckOut = () => {
-    if(!userInfo){
-
+    if (!user) {
       if (
         !guestInfo.name ||
         !guestInfo.phone ||
         !guestInfo.email ||
         !guestInfo.address
-      ){
-
+      ) {
         return toast.error("Please fill in the field");
       }
-      
+
       onCheckOut(guestInfo);
-    }else{
+    } else {
       guestInfo.buyerId = "Auth";
-      guestInfo.name=userInfo.name;
-      guestInfo.phone =userInfo.phone;
-      guestInfo.email =userInfo.email;
-      guestInfo.address=userInfo.address;
-      console.log("checkyoutform",guestInfo);
+      guestInfo.name = user.name || user.user.name;
+      guestInfo.phone = user.phone || user.user.phone;
+      guestInfo.email = user.email || user.user.email;
+      guestInfo.address = user.address || user.user.address;
+      console.log("checkyoutform", guestInfo);
       onCheckOut(guestInfo);
-      
     }
   };
   return (
     <div className="mt-6 p-4 border text-center rounded">
-      {userInfo ? (
+      {user ? (
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded w-full"
           onClick={handleCheckOut}

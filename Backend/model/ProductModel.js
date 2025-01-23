@@ -5,7 +5,7 @@ const productSchema = new mongoose.Schema(
     UserId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User", // Reference to the User model
-      // required: true,
+      required: true,
     },
     name: { type: String, required: true },
     price: { type: Number, required: true },

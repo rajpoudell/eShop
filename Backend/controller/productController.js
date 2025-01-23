@@ -21,6 +21,7 @@ const transporter = nodemailer.createTransport({
 const getProducts = async (req, res) => {
   try {
     const products = await Product.find();
+
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -29,21 +30,30 @@ const getProducts = async (req, res) => {
 
 const addProduct = async (req, res) => {
   try {
-    const { name, price, description, category, stock, UserId } = req.body;
+    const { name, price, description, category, stock, UserId,_id    } = req.body;
     const image = req.file ? req.file.filename : null;
+    let product;
+    if (_id ) {
+      product = await Product.findByIdAndUpdate(
+        _id,
+        { UserId, name, price, description, image, category, stock },
+        { new: true, runValidators: true }
+      );
+      res.status(201).json({ message: "Product Updated successfully", product });
+    } else {
+       product = new Product({
+        UserId,
+        name,
+        price,
+        description,
+        category,
+        stock,
+        image,
+      });
+      await product.save();
+      res.status(201).json({ message: "Product added successfully", product });
+    }
 
-    const product = new Product({
-      UserId,
-      name,
-      price,
-      description,
-      category,
-      stock,
-      image,
-    });
-    await product.save();
-
-    res.status(201).json({ message: "Product added successfully", product });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -251,6 +261,79 @@ const OrderLists = async (req, res) => {
   }
 };
 
+const updateOrderStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!status) {
+      return res.status(400).json({ message: "Status is required" });
+    }
+
+    const updatedOrder = await OrderModel.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    );
+
+    // Check if the order exists
+    if (!updatedOrder) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    // Respond with the updated order
+    res
+      .status(200)
+      .json({ message: "Order status updated successfully", updatedOrder });
+  } catch (error) {
+    console.error("Error updating order status:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const myProduct = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const products = await Product.find({ UserId: userId });
+
+    if (!products) {
+      return res
+        .status(404)
+        .json({ message: "No products found for this user" });
+    }
+
+    // Respond with the list of products
+    res.status(200).json(products);
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const deleteMyProduct = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const productId = req.body.productId; // Get product ID from the body
+
+    const product = await Product.findOneAndDelete({
+      _id: productId,
+      UserId: userId,
+    });
+
+    if (!product) {
+      return res
+        .status(404)
+        .json({ message: "Product not found or not owned by the user" });
+    }
+
+    // Respond with the list of products
+    res.status(200).json({ message: "Product deleted successfully" });
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   getProducts,
   addProduct,
@@ -259,4 +342,7 @@ module.exports = {
   orderCreated,
   OrderLists,
   getCategories,
+  updateOrderStatus,
+  myProduct,
+  deleteMyProduct,
 };

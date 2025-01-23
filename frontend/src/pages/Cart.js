@@ -10,7 +10,7 @@ import CheckOutForm from "../components/CheckOutForm";
 import axios from "axios";
 import { useEffect } from "react";
 
-const API_URL = process.env.REACT_APP_URL;
+const API_URL = process.env.REACT_APP_API_URL;
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -39,7 +39,7 @@ const Cart = () => {
 
     try {
       const response = await axios.post(
-        `${API_URL}/api/checkout`,
+        `${API_URL}/checkout`,
         orderDetails
       );
 

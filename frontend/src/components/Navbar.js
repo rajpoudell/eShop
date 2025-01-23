@@ -1,7 +1,8 @@
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logout } from "../redux/slices/userSlice";
 import { useState } from "react";
+import { AiOutlineUser } from "react-icons/ai";
 
 const Navbar = ({ userInfo, cartLength }) => {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ const Navbar = ({ userInfo, cartLength }) => {
             {/* Hamburger Menu Icon for Mobile */}
             <button
               className="md:hidden  text-white"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              onClick={() => setIsMenuOpen(() => !isMenuOpen)}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -45,21 +46,27 @@ const Navbar = ({ userInfo, cartLength }) => {
             {/* Links */}
             <div
               className={`${
-                isMenuOpen ? "flex flex-col absolute top-16 text-black w-full h-ful  right-6 gap-4" : "hidden"
+                isMenuOpen
+                  ? "flex flex-col absolute top-16 space-x-0 text-black w-full h-ful  right-6 gap-4"
+                  : "hidden"
               } md:flex  transition-all space-x-6 items-center`}
             >
-              <Link to="/" className="hover:text-gray-400">
-                Home
-              </Link>
-              {!userInfo?.isAdmin && (
-                <Link to="/cart" className="hover:text-gray-400 relative">
-                  Cart{" "}
-                  <small className="absolute bottom-3 left-7 text-teal-300">
-                    {cartLength}
-                  </small>
-                </Link>
-              )}
+              {/* to user and logged user only */}
 
+              {!userInfo?.isAdmin && (
+                <>
+                  <Link to="/cart" className="hover:text-gray-400 relative" >
+                    Cart
+                    <small className="absolute bottom-3 left-7 text-teal-300">
+                      {cartLength}
+                    </small>
+                  </Link>
+                  <Link to="/" className="hover:text-gray-400">
+                    Home
+                  </Link>
+                </>
+              )}
+              {/* for logged in user  */}
               {userInfo ? (
                 <>
                   <button
@@ -68,25 +75,18 @@ const Navbar = ({ userInfo, cartLength }) => {
                   >
                     Logout
                   </button>
-                  <Link to="/user/profile" className="hover:text-gray-400">
-                    🥷 {userInfo.name}
-                  </Link>
-                  {/* Admin-specific routes */}
+                  {/* if logged user is not admin  */}
+                  {!userInfo.isAdmin && (
+                    <Link to="/profile" className="hover:text-gray-400 ">
+                      🥷 {userInfo.name}
+                    </Link>
+                  )}
+
                   {userInfo.isAdmin && (
-                    <>
-                      <Link
-                        to="/admin/orderlist"
-                        className="hover:text-gray-400"
-                      >
-                        List of Orders
-                      </Link>
-                      <Link
-                        to="/admin/addproduct"
-                        className="hover:text-gray-400"
-                      >
-                        Add Product
-                      </Link>
-                    </>
+                    <div className="cursor-pointer flex items-center gap-2 text-sm tracking-wider hover:text-gray-400">
+                      <AiOutlineUser size={"20px"} className="text-red-500" />{" "}
+                      Hi {userInfo.name.split(" ")[0]}
+                    </div>
                   )}
                 </>
               ) : (
@@ -103,7 +103,6 @@ const Navbar = ({ userInfo, cartLength }) => {
           </div>
         </div>
       </nav>
-      <Outlet />
     </>
   );
 };

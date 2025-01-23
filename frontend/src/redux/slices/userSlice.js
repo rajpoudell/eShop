@@ -7,7 +7,9 @@ export const registerUsers = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const response = await registerUser(userData); // Assuming registerUser returns a promise
-      return response; // return the response to the fulfilled state
+      console.log(response);
+      
+      // return response; // return the response to the fulfilled state
     } catch (error) {
       return rejectWithValue(error.response.data.message);
     }

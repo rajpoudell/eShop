@@ -1,64 +1,80 @@
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-} from "react-router-dom";
-import "./index.css";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import { useSelector } from "react-redux";
+import "./index.css";
 
+import CustomerServicePage from "./pages/public fold/CustomerServicePage";
+import PaymentStatus from "./components/PaymentStatus";
+import ProductDetails from "./pages/ProductDetails";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import Home from "./pages/Home";
-import ProductDetails from "./pages/ProductDetails";
-import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Profile from "./pages/Profile";
+import Login from "./pages/Login";
 import Cart from "./pages/Cart";
-import PaymentStatus from "./components/PaymentStatus";
-import OrderList from "./Pages For Admin/OrderList";
-import AddProduct from "./Pages For Admin/AddProduct";
+import Home from "./pages/Home";
+
+import OrderList from "./pages/Admins/OrderList";
+import AddProduct from "./pages/Admins/AddProduct";
+
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AdminRoute from "./routes/AdminRoute";
-import Profile from "./pages/Profile";
-import CustomerServicePage from "./pages/public fold/CustomerServicePage";
-import { useSelector } from "react-redux";
+
+import Dashboard from "./pages/Admins/Dashboard";
+import Sidebar from "./pages/Admins/Sidebar";
+import Setting from "./pages/Admins/Setting";
+import ManageOrder from "./pages/Admins/ManageOrder";
+import MyProduct from "./pages/Admins/MyProduct";
 
 function App() {
   const cartLength = useSelector((state) => state.cart.cartLength || 0);
   const userInfo = useSelector((state) => state.user.userInfo);
- 
 
- 
   return (
     <div className="bg-slate-200">
       <Router>
-        <Navbar
-          userInfo={userInfo}
-          cartLength={cartLength}
-        />
-        ;{" "}
-        <Routes>
-          {/* Guest Routes */}
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/product/:id" element={<ProductDetails />} />
-          <Route path="/payment-success" element={<PaymentStatus />} />
-          <Route path="/payment-failed" element={<PaymentStatus />} />
-          <Route path="/customer-service" element={<CustomerServicePage />} />
+        <Navbar userInfo={userInfo} cartLength={cartLength} />{" "}
+        <div className="flex ">
+          {" "}
+          {userInfo?.isAdmin &&(
+            <div className="">
+              <Sidebar />
+            </div>
+          )}
+          <div className={`flex-1 ${userInfo?.isAdmin ? 'ml-10 sm:ml-60' : 'ml-10 sm:ml-0'}`}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/product/:id" element={<ProductDetails />} />
+              <Route path="/payment-success" element={<PaymentStatus />} />
+              <Route path="/payment-failed" element={<PaymentStatus />} />
+              <Route
+                path="/customer-service"
+                element={<CustomerServicePage />}
+              />
 
-          {/* Protected Routes */}
-          <Route element={<ProtectedRoute />}>
-            <Route path="/user/profile" element={<Profile />} />
-          </Route>
+              {/* Protected Routes */}
+              <Route element={<ProtectedRoute />}>
+                <Route path="/profile" element={<Profile />} />
+              </Route>
 
-          {/* Admin Routes */}
-          <Route element={<AdminRoute />}>
-            <Route path="/admin/orderlist" element={<OrderList />} />
-            <Route path="/admin/addproduct" element={<AddProduct />} />
-          </Route>
-        </Routes>
-        <Footer />
+              {/* Admin Routes */}
+              <Route element={<AdminRoute />}>
+                <Route path="/admin/dashboard" element={<Dashboard />} />
+                <Route path="/admin/orderlist" element={<OrderList />} />
+                <Route path="/admin/addproduct" element={<AddProduct />} />
+                <Route path="/admin/setting" element={<Setting />} />
+                <Route path="/admin/manageorder" element={<ManageOrder />} />
+                <Route path="/admin/myproduct" element={<MyProduct />} />
+              </Route>
+            </Routes>
+          </div>
+        </div>
+          {!userInfo?.isAdmin &&(
+              <Footer/>
+            )}
       </Router>
       <Toaster />
     </div>

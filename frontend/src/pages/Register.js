@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUsers } from "../redux/slices/userSlice";
 import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -25,24 +26,24 @@ const Register = () => {
       navigate("/"); // Redirect to dashboard or home
     }
   }, [userInfo, navigate]);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(registerUsers(formData)).then((res) => {
       if (res.meta.requestStatus === "fulfilled") {
-        navigate("/"); // Redirect to home after successful registration
-        formData({
+        toast.success("User registered Successfully")
+        navigate("/login"); // Redirect to home after successful registration
+        setFormData({
           name: "",
           email: "",
           phone: "",
           password: "",
           address: "",
-          role:null,
-        })
+          role: null,
+        });
       }
     });
   };
-
+  
   return (
     <div className="flex justify-center items-center min-h-screen bg-slate-200 ">
       <div className="w-full max-w-md bg-slate-100 p-8 rounded-lg shadow-lg ">

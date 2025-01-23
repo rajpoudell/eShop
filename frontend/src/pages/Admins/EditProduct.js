@@ -1,28 +1,42 @@
 import React, { useState, useEffect } from "react";
-import {  fetchCategory } from "../services/api";
+import { fetchCategory } from "../../services/api";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import toast from "react-hot-toast";
 const API_URL = process.env.REACT_APP_API_URL;
 
 // Fetch categories from the backend
 
-const ProductForm = () => {
+const EditProduct = ({ product, onSuccess }) => {
   const [categories, setCategories] = useState([]);
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState(product?.image || "");
   const user = useSelector((state) => state.user.userInfo);
 
   const [formData, setFormData] = useState({
-    UserId:"",
+    _id: "",
+    UserId: "",
     name: "",
-    price: "",
+    price: 0,
     description: "",
     category: "",
-    stock: "",
+    stock: 0,
     image: "",
   });
 
   // Fetch categories when the component mounts
   useEffect(() => {
+    if (product) {
+      setFormData({
+        _id: product._id || "",
+        UserId: product.UserId || "",
+        name: product.name || "",
+        price: product.price || 0,
+        description: product.description || "",
+        category: product.category || "",
+        stock: product.stock || 0,
+        image: product.image || "",
+      });
+    }
     const getCategories = async () => {
       try {
         const categoryData = await fetchCategory();
@@ -32,7 +46,7 @@ const ProductForm = () => {
       }
     };
     getCategories();
-  }, []);
+  }, [product]);
 
   // Handle input change
   const handleChange = (e) => {
@@ -56,52 +70,46 @@ const ProductForm = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const formDataToSend = new FormData();
+    formDataToSend.append("_id", formData._id);
     formDataToSend.append("name", formData.name);
     formDataToSend.append("price", formData.price);
     formDataToSend.append("description", formData.description);
     formDataToSend.append("category", formData.category);
     formDataToSend.append("stock", formData.stock);
-    formDataToSend.append("UserId", user.id);
-  
+    formDataToSend.append("UserId", product.UserId);
     if (image) {
       formDataToSend.append("image", image); // Append file
     }
-  
+
     try {
       console.log(user.token); // Check token value
       const response = await axios.post(
-        `${API_URL}/addproduct`, 
-        formDataToSend,  // Pass the FormData as the second argument
+        `${API_URL}/addproduct`,
+        formDataToSend,
         {
           headers: {
-            Authorization: `Bearer ${user.token}`, // Add token to the request header
-            "Content-Type": "multipart/form-data", // Ensure the server expects multipart data
+            Authorization: `Bearer ${user.token}`, 
+            "Content-Type": "multipart/form-data", 
           },
         }
       );
-      console.log("Product added successfully:", response);
-  
-      // Reset form after successful submission
-      setFormData({
-        name: "",
-        price: "",
-        description: "",
-        category: "",
-        stock: "",
-      });
-  
-      setImage(null);
+      toast.success("Update Product Successfully...");
+      onSuccess();
+
+      console.log("Update added successfully:", response);
+
     } catch (error) {
       console.error("Failed to add product:", error);
     }
   };
-  
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-gray-100 shadow-2xl rounded-lg my-4">
-      <h2 className="text-2xl font-semibold text-gray-700 mb-4">Add Product</h2>
+    <div className="max-w-lg mx-auto p-3 bg-gray-100 shadow-2xl rounded-lg my-4">
+      <h2 className="text-2xl font-semibold text-gray-700 mb-4">
+        Edit Product
+      </h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Product Name */}
         <div>
@@ -147,15 +155,34 @@ const ProductForm = () => {
 
         {/* Image URL */}
         <div>
-          <label className="block text-gray-600">Image URL</label>
+          <label className="block text-gray-600">Product Image</label>
           <input
             type="file"
+            accept="image/*"
             name="image"
-            onChange={handleChange} // Keep this
+            onChange={handleChange}
             className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-            placeholder="Upload a Image"
           />
         </div>
+
+        {/* Preview existing image or new selection */}
+        {image && (
+          <div className="my-4">
+            {typeof image === "string" ? (
+              <img
+                src={`${process.env.REACT_APP_URL}/uploads/${image}`}
+                alt="Product"
+                className="w-32 h-32 object-cover rounded"
+              />
+            ) : (
+              <img
+                src={URL.createObjectURL(image)}
+                alt="New Product"
+                className="w-32 h-32 object-cover rounded"
+              />
+            )}
+          </div>
+        )}
 
         {/* Category Dropdown */}
         <div>
@@ -200,11 +227,11 @@ const ProductForm = () => {
           type="submit"
           className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
         >
-          Submit
+          Update product
         </button>
       </form>
     </div>
   );
 };
 
-export default ProductForm;
+export default EditProduct;
