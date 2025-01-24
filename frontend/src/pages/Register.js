@@ -111,9 +111,9 @@ const Register = () => {
               <option value="false" >
                 Customer
               </option>
-              <option value="true" >
+              {/* <option value="true" >
                 Seller
-              </option>
+              </option> */}
             </select>
           </div>
           <button

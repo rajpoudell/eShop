@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/slices/cartSlice";
 import { getProducts } from "../redux/slices/productSlice";
 import toast from "react-hot-toast";
+import { AiOutlineStock } from "react-icons/ai";
 
 const API_URL = process.env.REACT_APP_URL;
 
@@ -33,7 +34,7 @@ const ProductDetails = () => {
         <div className="lg:w-4/5 mx-auto flex flex-wrap">
           <img
             alt="ecommerce"
-            className="lg:w-1/2 w-full lg:h-auto h-50 aspect-square object-cover object-center rounded bg-slate-100"
+            className="lg:w-1/2 w-full lg:h-auto h-50 aspect-square object-center rounded bg-slate-100"
             src={`${API_URL}/uploads/${product.image}`} // Concatenate the base URL with image filename
           />
           <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
@@ -58,7 +59,8 @@ const ProductDetails = () => {
                   <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
                 </svg>
                 {/* Repeat for the rest of the stars */}
-                <span className="text-gray-600 ml-3">4 Reviews</span>
+                <span className="text-gray-600 ml-3">4 Reviews</span> 
+                <span className="text-indigo-500 ml-3 flex items-center "> In stock: {product.stock} <AiOutlineStock size={20}/></span>
               </span>
             </div>
             <p className="leading-relaxed">{product.description}</p>

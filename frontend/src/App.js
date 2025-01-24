@@ -25,6 +25,7 @@ import Sidebar from "./pages/Admins/Sidebar";
 import Setting from "./pages/Admins/Setting";
 import ManageOrder from "./pages/Admins/ManageOrder";
 import MyProduct from "./pages/Admins/MyProduct";
+import TrackProduct from "./pages/TrackProduct";
 
 function App() {
   const cartLength = useSelector((state) => state.cart.cartLength || 0);
@@ -41,7 +42,7 @@ function App() {
               <Sidebar />
             </div>
           )}
-          <div className={`flex-1 ${userInfo?.isAdmin ? 'ml-10 sm:ml-60' : 'ml-10 sm:ml-0'}`}>
+          <div className={`flex-1 ${userInfo?.isAdmin ? 'ml-10 sm:ml-60' : 'ml-0 sm:ml-0'}`}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
@@ -50,6 +51,7 @@ function App() {
               <Route path="/product/:id" element={<ProductDetails />} />
               <Route path="/payment-success" element={<PaymentStatus />} />
               <Route path="/payment-failed" element={<PaymentStatus />} />
+              <Route path="/tracking" element={<TrackProduct />} />
               <Route
                 path="/customer-service"
                 element={<CustomerServicePage />}

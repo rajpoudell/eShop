@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrders, setCategory } from "../../redux/slices/orderSlice";
+import OrderStatus from "../../components/OrderStatus";
+
 
 const ManageOrder = () => {
   const user = useSelector((state) => state.user.userInfo);
@@ -40,19 +42,19 @@ const ManageOrder = () => {
       {error && <p className="text-center text-red-500">{error}</p>}
 
       {/* Order Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
         {[...filteredProduct]
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
           .map((product, index) => (
             <div
               key={product._id.$oid || index}
-              className="bg-white shadow-lg p-4 sm:p-5 rounded-md hover:shadow-xl transition duration-300"
+              className="bg-white shadow-lg  p-2 sm:p-3  rounded-md hover:shadow-xl transition duration-300"
             >
               <h1 className="text-blue-700 text-lg sm:text-xl font-bold">
                 S.No: {index + 1}
               </h1>
 
-              <table className="w-full table-auto border-collapse mt-4 text-sm sm:text-base">
+              <table className="w-full table border-collapse mt-2 text-sm sm:text-base">
                 <thead>
                   <tr className="bg-gray-200 text-gray-700">
                     <th className="py-2 px-3 text-left">Product</th>
@@ -98,15 +100,9 @@ const ManageOrder = () => {
                   </p>
                   <p>
                     <strong>Status:</strong>
-                    <span
-                      className={`ml-2 font-semibold ${
-                        product.status === "Shipped"
-                          ? "text-blue-700 animate-pulse"
-                          : "text-red-600 animate-pulse"
-                      }`}
-                    >
-                      {product.status}
-                    </span>
+                    <OrderStatus order={product} />
+
+                  
                   </p>
                 </div>
               </div>

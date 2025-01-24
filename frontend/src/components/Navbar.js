@@ -55,14 +55,17 @@ const Navbar = ({ userInfo, cartLength }) => {
 
               {!userInfo?.isAdmin && (
                 <>
+                  <Link to="/" className="hover:text-gray-400">
+                    Home
+                  </Link>
                   <Link to="/cart" className="hover:text-gray-400 relative" >
                     Cart
                     <small className="absolute bottom-3 left-7 text-teal-300">
                       {cartLength}
                     </small>
                   </Link>
-                  <Link to="/" className="hover:text-gray-400">
-                    Home
+                  <Link to="/tracking" className="hover:text-gray-400">
+                    Track your Order
                   </Link>
                 </>
               )}

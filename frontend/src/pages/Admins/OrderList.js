@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import OrderStatus from "../../components/OrderStatus";
 import { getOrders } from "../../redux/slices/orderSlice";
 
 
@@ -11,7 +10,6 @@ const OrderList = () => {
   const { orderLength } = useSelector((state) => state.orders);
 
   const token = `${user.token || user.user.token}`; // Replace this with the actual token
-// console.log(orderItem)
   const dispatch = useDispatch();
 
 
@@ -117,7 +115,16 @@ const OrderList = () => {
                   <strong>Shipping Address:</strong> {order.buyerAddress}
                 </p>
                 <p>
-                  <OrderStatus order={order} />
+
+                  <strong>Status:</strong>   <span
+                      className={`ml-2 font-semibold ${
+                        order.status === "Shipped"
+                          ? "text-blue-700 animate-pulse"
+                          : "text-red-600 animate-pulse"
+                      }`}
+                    >
+                       {order.status}
+                      </span>
                 </p>
               </div>
             </div>
