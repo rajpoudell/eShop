@@ -11,7 +11,7 @@ const ProductForm = () => {
   const [categories, setCategories] = useState([]);
   const [image, setImage] = useState(null);
   const user = useSelector((state) => state.user.userInfo);
-
+console.log(user)
   const [formData, setFormData] = useState({
     UserId: "",
     name: "",
@@ -64,21 +64,21 @@ const ProductForm = () => {
     formDataToSend.append("description", formData.description);
     formDataToSend.append("category", formData.category);
     formDataToSend.append("stock", formData.stock);
-    formDataToSend.append("UserId", user._id);
+    formDataToSend.append("UserId", user.id || user._id);
 
     if (image) {
-      formDataToSend.append("image", image); // Append file
+      formDataToSend.append("image", image); 
     }
 
     try {
       console.log(user.token); // Check token value
       const response = await axios.post(
         `${API_URL}/addproduct`,
-        formDataToSend, // Pass the FormData as the second argument
+        formDataToSend, 
         {
           headers: {
-            Authorization: `Bearer ${user.token}`, // Add token to the request header
-            "Content-Type": "multipart/form-data", // Ensure the server expects multipart data
+            Authorization: `Bearer ${user.token}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -157,6 +157,23 @@ const ProductForm = () => {
             placeholder="Upload a Image"
           />
         </div>
+        {image && (
+          <div className="my-4">
+            {typeof image === "string" ? (
+              <img
+                src={`${process.env.REACT_APP_URL}/uploads/${image}`}
+                alt="Product"
+                className="w-32 h-32 object-cover rounded"
+              />
+            ) : (
+              <img
+                src={URL.createObjectURL(image)}
+                alt="New Product"
+                className="w-32 h-32 object-cover rounded"
+              />
+            )}
+          </div>
+        )}
 
         {/* Category Dropdown */}
         <div>
