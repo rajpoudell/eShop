@@ -34,7 +34,7 @@ const MyProduct = () => {
     };
 
     fetchProducts();
-  }, [user.token,products]);
+  }, [user.token]);
 
   // Handle delete product
   const handleDelete = async (productId) => {
