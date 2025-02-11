@@ -99,8 +99,8 @@ const paymentCheckOut = async (req, res) => {
     const lineItems = items.map((item) => {
       let unitAmount = item.price * 100; // Convert to cents
       
-      if (unitAmount < 10) {
-        unitAmount = 10; // Set to 50 cents if less than the minimum allowed
+      if (unitAmount < 50) {
+        unitAmount = 50; // Set to 50 cents if less than the minimum allowed
       }
 
       return {
