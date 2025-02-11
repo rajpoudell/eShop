@@ -96,33 +96,40 @@ const paymentCheckOut = async (req, res) => {
       return res.status(400).json({ error: "Items array is required" });
     }
 
-    const lineItems = items.map((item) => ({
-      price_data: {
-        currency: `${"npr" || "NPR"}`, // You can change the currency if needed
-        product_data: {
-          name: item.name,
-          images: [`https://eshop-n5o3.onrender.com/uploads/${item.image}`],
+    const lineItems = items.map((item) => {
+      let unitAmount = item.price * 100; // Convert to cents
+      
+      if (unitAmount < 10) {
+        unitAmount = 10; // Set to 50 cents if less than the minimum allowed
+      }
+
+      return {
+        price_data: {
+          currency: `${"npr" || "NPR"}`, // You can change the currency if needed
+          product_data: {
+            name: item.name,
+            images: [`https://eshop-n5o3.onrender.com/uploads/${item.image}`],
+          },
+          unit_amount: unitAmount, // Stripe accepts the price in cents
         },
-        unit_amount: item.price * 100, // Stripe accepts the price in cents
-      },
-      quantity: item.quantity,
-    }));
+        quantity: item.quantity,
+      };
+    });
 
     const session = await stripe.checkout.sessions.create({
       line_items: lineItems,
       mode: "payment",
-      success_url: "https://eshop.poudelraj.com.np/payment-success?status=success", // Redirect after successful payment
+      success_url: "https://eshop.poudelraj.com.np/payment-success?status=success",
       cancel_url: "https://eshop.poudelraj.com.np/payment-failed?status=cancel",
     });
 
     res.status(200).json({ url: session.url });
   } catch (error) {
     console.error("Error creating Stripe session:", error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while processing your payment." });
+    res.status(500).json({ error: "An error occurred while processing your payment." });
   }
 };
+
 
 const orderCreated = async (req, res) => {
   try {
