@@ -10,6 +10,7 @@ const PaymentStatus = () => {
   const navigate = useNavigate();
 
   const status = new URLSearchParams(window.location.search).get('status');
+  console.log("Status:", status);
   useEffect(() => {
     const orderDetails = JSON.parse(localStorage.getItem('orderDetails'));
     
@@ -20,13 +21,13 @@ const PaymentStatus = () => {
       }
       dispatch(clearCart());
       toast.success("Payment successful! , Your cart has been cleared.");
-      navigate(`${process.env.Home_URL}/payment-success?status=success`);
+      navigate('/payment-success?status=success', { replace: true });
     } else if (status === 'cancel') {
      
       toast.error("Payment was canceled. Please try again.");
-      navigate('/payment-failed'); 
+      navigate('/payment-failed', { replace: true });
     }
-  }, [status,dispatch, navigate]);
+  }, [status]);
 
   return (
     <div className="container mx-auto p-6 max-w-xl">
