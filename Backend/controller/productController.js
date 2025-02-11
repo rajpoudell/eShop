@@ -30,18 +30,21 @@ const getProducts = async (req, res) => {
 
 const addProduct = async (req, res) => {
   try {
-    const { name, price, description, category, stock, UserId,_id    } = req.body;
+    const { name, price, description, category, stock, UserId, _id } = req.body;
     const image = req.file ? req.file.filename : null;
+    console.log(req.body)
     let product;
-    if (_id ) {
+    if (_id) {
       product = await Product.findByIdAndUpdate(
         _id,
         { UserId, name, price, description, image, category, stock },
         { new: true, runValidators: true }
       );
-      res.status(201).json({ message: "Product Updated successfully", product });
+      res
+        .status(201)
+        .json({ message: "Product Updated successfully", product });
     } else {
-       product = new Product({
+      product = new Product({
         UserId,
         name,
         price,
@@ -53,7 +56,6 @@ const addProduct = async (req, res) => {
       await product.save();
       res.status(201).json({ message: "Product added successfully", product });
     }
-
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -99,7 +101,7 @@ const paymentCheckOut = async (req, res) => {
         currency: "usd", // You can change the currency if needed
         product_data: {
           name: item.name,
-          images: [`http://localhost:5000/uploads/${item.image}`],
+          images: [`https://eshop-n5o3.onrender.com/uploads/${item.image}`],
         },
         unit_amount: item.price * 100, // Stripe accepts the price in cents
       },
@@ -109,8 +111,8 @@ const paymentCheckOut = async (req, res) => {
     const session = await stripe.checkout.sessions.create({
       line_items: lineItems,
       mode: "payment",
-      success_url: "http://localhost:3000/payment-success?status=success", // Redirect after successful payment
-      cancel_url: "http://localhost:3000/payment-failed?status=cancel",
+      success_url: "https://eshop.poudelraj.com.np/payment-success?status=success", // Redirect after successful payment
+      cancel_url: "https://eshop.poudelraj.com.np/payment-failed?status=cancel",
     });
 
     res.status(200).json({ url: session.url });
@@ -147,6 +149,15 @@ const orderCreated = async (req, res) => {
           .json({ message: "One or more products not found" });
       }
 
+      const sellerIds = products.map((product) => product.UserId);
+      if (new Set(sellerIds).size !== 1) {
+        return res
+          .status(400)
+          .json({ message: "Products must belong to the same seller" });
+      }
+
+      const sellerId = sellerIds[0];
+
       // Create the order
       const newOrder = new OrderModel({
         buyerId,
@@ -157,10 +168,12 @@ const orderCreated = async (req, res) => {
         items,
         totalAmount,
         orderDate,
+        sellerId:sellerId,
       });
 
       // Save the order
-      await newOrder.save();
+      const savedOrder = await newOrder.save();
+      const orderId = savedOrder._id;
 
       // Send Email
       const mailOptions = {
@@ -179,10 +192,12 @@ const orderCreated = async (req, res) => {
               <td style="padding: 8px;">${new Date(
                 orderDate
               ).toLocaleDateString()}</td>
-            </tr>
+              <td style="padding: 8px; font-weight: bold; background-color: #f4f4f4;">Tracking No:</td>
+              </tr>
             <tr>
               <td style="padding: 8px; font-weight: bold; background-color: #f4f4f4;">Total Amount:</td>
               <td style="padding: 8px; color: #E74C3C;"><strong>$${totalAmount}</strong></td>
+              <td style="padding: 8px; color: #E74C3C;"><strong>$${orderId}</strong></td>
             </tr>
           </table>
     
@@ -220,13 +235,6 @@ const orderCreated = async (req, res) => {
         }
       });
 
-      transporter.sendMail(mailOptions, (err, info) => {
-        if (err) {
-          console.error("Email send error:", err);
-        } else {
-          console.log("Email sent:", info.response);
-        }
-      });
       res
         .status(201)
         .json({ message: "Order created successfully", order: newOrder });

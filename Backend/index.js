@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const productRoutes = require('./routes/productRoutes');
 const userRoute = require('./routes/userRoutes');
+const compression = require('compression');
 
 const path = require('path');
 
@@ -12,6 +13,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use(compression());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); 
 app.use("/api",productRoutes);
 app.use("/api",userRoute);

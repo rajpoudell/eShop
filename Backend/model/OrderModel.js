@@ -19,7 +19,7 @@ const itemSchema = new mongoose.Schema({
     type: Number,
     required: true
   }
-});
+}, { _id: false });
 
 const orderSchema = new mongoose.Schema({
   buyerId: {
@@ -48,9 +48,14 @@ const orderSchema = new mongoose.Schema({
     default: "Pending", 
   },
   items: [itemSchema],
+  sellerId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',  // Reference to the User model (seller)
+    required: true
+  },
   totalAmount: {
     type: Number,
-    required: true
+    required: true  
   },
   orderDate: {
     type: Date,
