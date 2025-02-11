@@ -31,10 +31,10 @@ const CheckOutForm = ({ onCheckOut }) => {
       onCheckOut(guestInfo);
     } else {
       guestInfo.buyerId = "Auth";
-      guestInfo.name = user?.name || user.user.name;
-      guestInfo.phone = user?.phone || user.user.phone;
-      guestInfo.email = user?.email || user.user.email;
-      guestInfo.address = user?.address || user.user.address;
+      guestInfo.name = user?.name || user?.user?.name;
+      guestInfo.phone = user?.phone || user?.user?.phone;
+      guestInfo.email = user?.email || user?.user?.email;
+      guestInfo.address = user?.address || user?.user?.address;
       console.log("checkyoutform", guestInfo);
       onCheckOut(guestInfo);
     }
