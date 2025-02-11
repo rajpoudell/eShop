@@ -27,7 +27,7 @@ const PaymentStatus = () => {
       toast.error("Payment was canceled. Please try again.");
       navigate('/payment-failed', { replace: true });
     }
-  }, [status]);
+  }, [status, dispatch, navigate]);
 
   return (
     <div className="container mx-auto p-6 max-w-xl">
