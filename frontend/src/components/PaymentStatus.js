@@ -20,7 +20,7 @@ const PaymentStatus = () => {
       }
       dispatch(clearCart());
       toast.success("Payment successful! , Your cart has been cleared.");
-      navigate('/payment-success?status=success'); 
+      navigate(`${process.env.Home_URL}/payment-success?status=success`);
     } else if (status === 'cancel') {
      
       toast.error("Payment was canceled. Please try again.");
