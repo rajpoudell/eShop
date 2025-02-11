@@ -11,7 +11,6 @@ const ProductForm = () => {
   const [categories, setCategories] = useState([]);
   const [image, setImage] = useState(null);
   const user = useSelector((state) => state.user.userInfo);
-console.log(user)
   const [formData, setFormData] = useState({
     UserId: "",
     name: "",

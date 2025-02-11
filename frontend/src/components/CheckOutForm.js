@@ -15,6 +15,8 @@ const CheckOutForm = ({ onCheckOut }) => {
   const handleChange = (e) => {
     setGuestInfo({ ...guestInfo, [e.target.name]: e.target.value });
   };
+  // console.log(guestInfo);
+  
   const handleCheckOut = () => {
     if (!user) {
       if (
@@ -25,14 +27,14 @@ const CheckOutForm = ({ onCheckOut }) => {
       ) {
         return toast.error("Please fill in the field");
       }
-
+      console.log("!user",guestInfo)
       onCheckOut(guestInfo);
     } else {
       guestInfo.buyerId = "Auth";
-      guestInfo.name = user.name || user.user.name;
-      guestInfo.phone = user.phone || user.user.phone;
-      guestInfo.email = user.email || user.user.email;
-      guestInfo.address = user.address || user.user.address;
+      guestInfo.name = user?.name || user.user.name;
+      guestInfo.phone = user?.phone || user.user.phone;
+      guestInfo.email = user?.email || user.user.email;
+      guestInfo.address = user?.address || user.user.address;
       console.log("checkyoutform", guestInfo);
       onCheckOut(guestInfo);
     }
