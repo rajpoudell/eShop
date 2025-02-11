@@ -6,6 +6,8 @@ import { addToCart } from "../redux/slices/cartSlice";
 import { getProducts } from "../redux/slices/productSlice";
 import toast from "react-hot-toast";
 import { AiOutlineStock } from "react-icons/ai";
+import { IoCartOutline } from "react-icons/io5";
+import { MdOutlineSell } from "react-icons/md";
 
 const API_URL = process.env.REACT_APP_URL;
 
@@ -30,8 +32,8 @@ const ProductDetails = () => {
   }
   return (
     <section className="text-gray-600 overflow-hidden bg-slate-200">
-      <div className="container px-5 py-24 mx-auto">
-        <div className="lg:w-4/5 mx-auto flex flex-wrap">
+      <div className="container px-5 py-24 mx-auto ">
+        <div className="lg:w-4/5 mx-auto flex  flex-wrap">
           <img
             alt="ecommerce"
             className="lg:w-1/2 w-full lg:h-auto h-50 aspect-square object-center rounded bg-slate-100"
@@ -67,7 +69,7 @@ const ProductDetails = () => {
 
             <div className="flex">
               <span className="title-font font-medium text-2xl text-gray-900">
-                ${product.price}
+                Rs.{product.price}
               </span>
             </div>
             <div className="flex gap-5 mt-8">
@@ -76,8 +78,10 @@ const ProductDetails = () => {
                   dispatch(addToCart(product));
                   toast.success("Add Product!");
                 }}
-                className="flex  text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
+                className="flex items-center gap-2 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
               >
+                <IoCartOutline />
+
                 Add to Cart
               </button>
               <Link to={"/cart"}>
@@ -85,8 +89,10 @@ const ProductDetails = () => {
                   onClick={() => {
                     dispatch(addToCart(product));
                   }}
-                  className="flex  text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
+                  className="flex items-center gap-2 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
                 >
+                  <MdOutlineSell />
+
                   Buy Now !
                 </button>
               </Link>

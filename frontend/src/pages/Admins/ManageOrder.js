@@ -67,7 +67,7 @@ const ManageOrder = () => {
                   {product.items.map((item, i) => (
                     <tr key={i} className="border-t">
                       <td className="py-2 px-3">{item.name}</td>
-                      <td className="py-2 px-3">${item.price}</td>
+                      <td className="py-2 px-3">Npr.{item.price}</td>
                       <td className="py-2 px-3">{item.quantity}</td>
                       <td className="py-2 px-3 font-semibold">
                         ${item.price * item.quantity}
@@ -111,7 +111,7 @@ const ManageOrder = () => {
               <div className="mt-4 flex flex-col sm:flex-row sm:justify-between items-center bg-blue-100 p-4 rounded-lg text-sm sm:text-base">
                 <span className="font-semibold">Total Amount:</span>
                 <span className="text-xl font-bold text-blue-800">
-                  ${product.totalAmount}
+                  Npr.{product.totalAmount}
                 </span>
               </div>
 

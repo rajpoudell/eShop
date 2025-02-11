@@ -3,7 +3,6 @@ import { FaClipboardList, FaTruck, FaCheckCircle } from "react-icons/fa";
 
 const TrackProduct = () => {
   const [inputValue, setInputValue] = useState("");
-  const statusSteps = ["Pending", "Shipped", "Delivered"];
   const [trackedOrder, setTrackedOrder] = useState(null);
   const [trackDiv, setTrackDiv] = useState(false);
   const [estimatedDelivery, setEstimatedDelivery] = useState("");
@@ -31,7 +30,7 @@ const TrackProduct = () => {
       orderDate: "2025-01-23T16:19:39.817+00:00",
     },
   ];
-  const currentStepIndex = statusSteps.indexOf(orders.status);
+  // const currentStepIndex = statusSteps.indexOf(orders.status);
 
   const handleChange = (e) => {
     setInputValue(e.target.value);
@@ -45,9 +44,7 @@ const TrackProduct = () => {
     } else {
       setTrackedOrder(result);
 
-      console.log(trackedOrder);
       setTrackDiv(true);
-      console.log(currentStepIndex + 1);
     }
   };
   useEffect(() => {
@@ -91,92 +88,92 @@ const TrackProduct = () => {
           <button
             type="submit"
             className="text-start mt-10 px-6 py-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-600 hover:shadow-blue-400 hover:shadow-lg"
-            // disabled={loading}
           >
-            {/* {loading ? "Searching..." : "Search"} */}
             Search
           </button>
         </div>
       </form>
 
-      {trackDiv && (
-        <div className="max-w-screen-md mt-10 mx-auto p-6 bg-white rounded-lg shadow-2xl border">
-          <h2 className="text-lg font-semibold text-gray-800 mb-4">
-            Order for: {trackedOrder?.buyerName}
-          </h2>
-          <p className="text-sm text-gray-600">
-            Address: {trackedOrder?.Address}
-          </p>
-          <p className="text-sm text-gray-600">
-            Order Date: {new Date(trackedOrder?.orderDate).toLocaleString()}
-          </p>
-          <p className="text-sm text-gray-600">
-            Estimated Delivery By: {estimatedDelivery}
-          </p>
+      {trackDiv ? (
+        trackedOrder?.id ? (
+          <div className="max-w-screen-md mt-10 mx-auto p-6 bg-white rounded-lg shadow-2xl border">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4">
+              Order for: {trackedOrder?.buyerName}
+            </h2>
+            <p className="text-sm text-gray-600">
+              Address: {trackedOrder?.Address}
+            </p>
+            <p className="text-sm text-gray-600">
+              Order Date: {new Date(trackedOrder?.orderDate).toLocaleString()}
+            </p>
+            <p className="text-sm text-gray-600">
+              Estimated Delivery By: {estimatedDelivery}
+            </p>
 
-          <div className="flex items-center justify-between mt-6">
-            {/* Pending */}
-            <div className="flex flex-col items-center">
-              <div
-                className={`w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white text-xl font-bold 
-            
-            transition-all duration-300 ease-in-out`}
-              >
-                <FaClipboardList />
+            <div className="flex items-center justify-between mt-6">
+              {/* Pending */}
+              <div className="flex flex-col items-center">
+                <div
+                  className={`w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white text-xl font-bold transition-all duration-300 ease-in-out`}
+                >
+                  <FaClipboardList />
+                </div>
+              </div>
+
+              {/* Shipped */}
+              <div className="flex flex-col items-center">
+                <div
+                  className={`w-12 h-12 rounded-full flex items-center justify-center text-white text-xl font-bold ${
+                    trackedOrder.status === "Shipped" ||
+                    trackedOrder.status === "Delivered"
+                      ? "bg-blue-600"
+                      : "bg-gray-600"
+                  } transition-all duration-300 ease-in-out`}
+                >
+                  <FaTruck />
+                </div>
+              </div>
+
+              {/* Delivered */}
+              <div className="flex flex-col items-center">
+                <div
+                  className={`w-12 h-12 rounded-full flex items-center justify-center text-white text-xl font-bold ${
+                    trackedOrder.status === "Delivered"
+                      ? "bg-blue-600"
+                      : "bg-gray-600"
+                  } transition-all duration-300 ease-in-out`}
+                >
+                  <FaCheckCircle />
+                </div>
               </div>
             </div>
 
-            {/* Shipped */}
-            <div className="flex flex-col items-center">
+            <div className="mt-4 relative">
+              <div className="absolute top-1/2 w-full h-1 bg-gray-300 rounded-md"></div>
               <div
-                className={`w-12 h-12 rounded-full flex items-center justify-center text-white text-xl font-bold 
-            ${
-              trackedOrder.status === "Shipped" ||
-              trackedOrder.status === "Delivered"
-                ? "bg-blue-600"
-                : "bg-gray-600"
-            } 
-            transition-all duration-300 ease-in-out`}
-              >
-                <FaTruck />
-              </div>
-            </div>
-
-            {/* Delivered */}
-            <div className="flex flex-col items-center">
-              <div
-                className={`w-12 h-12 rounded-full flex items-center justify-center text-white text-xl font-bold 
-            ${
-              trackedOrder.status === "Delivered"
-                ? "bg-blue-600"
-                : "bg-gray-600"
-            } 
-            transition-all duration-300 ease-in-out`}
-              >
-                <FaCheckCircle />
-              </div>
+                className={`absolute top-1/2 h-1 bg-blue-600 transition-all duration-300 ease-in-out`}
+                style={{
+                  width: `${
+                    trackedOrder.status === "Pending"
+                      ? 0
+                      : trackedOrder.status === "Shipped"
+                      ? 50
+                      : trackedOrder.status === "Delivered"
+                      ? 100
+                      : 0
+                  }%`,
+                }}
+              ></div>
             </div>
           </div>
-
-          <div className="mt-4 relative">
-            <div className="absolute top-1/2 w-full h-1 bg-gray-300 rounded-md"></div>
-            <div
-              className={`absolute top-1/2 h-1 bg-blue-600 transition-all duration-300 ease-in-out`}
-              style={{
-                width: `${
-                  trackedOrder.status === "Pending" && "Shipped"
-                    ? 0
-                    : trackedOrder.status === "Shipped" && "Delivered"
-                    ? 50
-                    : trackedOrder.status === "Delivered"
-                    ? 100
-                    : 0
-                }%`,
-              }}
-            ></div>
+        ) : (
+          <div className="max-w-screen-md mt-10 mx-auto p-6 bg-white rounded-lg shadow-2xl border text-center">
+            <p className="text-lg font-semibold text-red-600">
+              Product not found.
+            </p>
           </div>
-        </div>
-      )}
+        )
+      ) : null}
     </div>
   );
 };

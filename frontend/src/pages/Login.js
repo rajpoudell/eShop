@@ -32,15 +32,21 @@ const Login = () => {
   // Redirect user if already logged in
   useEffect(() => {
     if (userInfo) {
-      navigate("/"); // Redirect to dashboard or home
+      if (userInfo.isAdmin) {
+        navigate('/admin/dashboard');
+      } else {
+        navigate('/');
+      }// Redirect to dashboard or home
     }
   }, [userInfo, navigate]);
 
   // Handle login form submission
-  const onSubmit =  (data) => {
+  const onSubmit =  (data) => {    
+    
      dispatch(loginUsers(data));
     toast.success("Logging...")
     reset(); 
+
   };
 
   return (

@@ -12,6 +12,7 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import Cart from "./pages/Cart";
+import Products from "./pages/Products";
 import Home from "./pages/Home";
 
 import OrderList from "./pages/Admins/OrderList";
@@ -47,6 +48,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/products" element={<Products />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/product/:id" element={<ProductDetails />} />
               <Route path="/payment-success" element={<PaymentStatus />} />

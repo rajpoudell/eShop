@@ -76,7 +76,7 @@ const MyProduct = () => {
                 {/* Show first word of the product name */}
               </h2>
               <p className="text-gray-600 text-sm font-medium mb-4">
-                ${product.price}
+                Npr.{product.price}
               </p>
 
               <div className="">

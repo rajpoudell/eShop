@@ -83,7 +83,7 @@ const OrderList = () => {
                 {order.items.map((item, i) => (
                   <tr key={i} className="border-t">
                     <td className="py-3 px-4">{item.name}</td>
-                    <td className="py-3 px-4">${item.price}</td>
+                    <td className="py-3 px-4">Npr.{item.price}</td>
                     <td className="py-3 px-4">{item.quantity}</td>
                     <td className="py-3 px-4 font-semibold">
                       ${item.price * item.quantity}

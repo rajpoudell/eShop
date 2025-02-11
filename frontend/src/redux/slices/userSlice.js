@@ -25,6 +25,7 @@ export const loginUsers = createAsyncThunk(
       localStorage.setItem("token", data.token);
       
       localStorage.setItem("userInfo", JSON.stringify(data.user));
+      
       return data;
     } catch (error) {
       return rejectWithValue(error.response.data.message);
@@ -72,7 +73,7 @@ const userSlice = createSlice({
       .addCase(loginUsers.fulfilled, (state, action) => {
         state.loading = false;
         state.userInfo = action.payload;
-        console.log("state.userifno",state.userInfo);
+        console.log("state.userinfo",state.userInfo);
         
       })
       .addCase(loginUsers.rejected, (state, action) => {

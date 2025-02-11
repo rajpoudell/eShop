@@ -93,7 +93,7 @@ const Cart = () => {
               />
               <div className="flex-1 ml-4">
                 <h2 className="text-lg font-semibold">{item.name}</h2>
-                <p className="text-gray-600">${item.price}</p>
+                <p className="text-gray-600">Rs.{item.price}</p>
 
                 {/* Quantity controls */}
                 <div className="flex items-center mt-2">
@@ -127,7 +127,7 @@ const Cart = () => {
           {/* Display total amount */}
           <div className="flex justify-between items-center mt-4">
             <h2 className="text-xl font-semibold">Total Amount:</h2>
-            <p className="text-lg font-semibold">${totalAmount}</p>
+            <p className="text-lg font-semibold">Rs.{totalAmount}</p>
           </div>
 
           {/* Checkout form */}

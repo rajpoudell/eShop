@@ -98,7 +98,7 @@ const paymentCheckOut = async (req, res) => {
 
     const lineItems = items.map((item) => ({
       price_data: {
-        currency: "usd", // You can change the currency if needed
+        currency: `${"npr" || "NPR"}`, // You can change the currency if needed
         product_data: {
           name: item.name,
           images: [`https://eshop-n5o3.onrender.com/uploads/${item.image}`],
@@ -196,7 +196,7 @@ const orderCreated = async (req, res) => {
               </tr>
             <tr>
               <td style="padding: 8px; font-weight: bold; background-color: #f4f4f4;">Total Amount:</td>
-              <td style="padding: 8px; color: #E74C3C;"><strong>$${totalAmount}</strong></td>
+              <td style="padding: 8px; color: #E74C3C;"><strong>Npr. ${totalAmount}</strong></td>
               <td style="padding: 8px; color: #E74C3C;"><strong>$${orderId}</strong></td>
             </tr>
           </table>
