@@ -1,6 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require("fs")
+
 const uploadDir = "uploads/";
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
@@ -12,7 +13,7 @@ const storage = multer.diskStorage({
     cb(null, 'uploads/'); // Folder where images will be saved
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Save file with timestamp and extension
+    cb(null, Date.now() + path.extname( file.originalname)); // Save file with timestamp and extension
   }
 });
 

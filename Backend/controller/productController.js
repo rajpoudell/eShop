@@ -31,7 +31,7 @@ const getProducts = async (req, res) => {
 const addProduct = async (req, res) => {
   try {
     const { name, price, description, category, stock, UserId, _id } = req.body;
-    const image = req.file ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}` : null;
+    const image = req.file ? req.file.filename : null;
     console.log(req.body)
     let product;
     if (_id) {
