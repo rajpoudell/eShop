@@ -22,7 +22,7 @@ router.get("/products", getProducts);
 router.get("/product/:id", getProductById);
 router.get("/categories", getCategories);
 
-router.post("/addproduct", protect, admin, upload.single("image"), addProduct);
+router.post("/addproduct", upload.single("image"), protect, admin, addProduct);
 
 router.get("/orderLists", protect, admin, OrderLists);
 router.put("/orderstatus/:id", updateOrderStatus);
